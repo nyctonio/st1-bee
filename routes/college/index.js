@@ -27,6 +27,26 @@ router.get('/:id', (req, res) => {
     return res.json(college);
 });
 
+router.patch('/:id', (req, res) => {
+    let college = data.find(college => college.id === parseInt(req.params.id));
+    if (!college) {
+        return res.status(404).send('The college with the given ID was not found.');
+    }
+    data.map(college => {
+        if (college.id === parseInt(req.params.id)) {
+            college.name = req.body.name;
+            college.departments = req.body.departments;
+            college.totalStudents = req.body.totalStudents;
+            college.address = req.body.address;
+        }
+        return college;
+    });
+    res.json({
+        message: 'College updated successfully',
+        college
+    });
+});
+
 router.delete('/:id', (req, res) => {
     const college = data.find(college => college.id === parseInt(req.params.id));
     if (!college) {
