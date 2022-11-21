@@ -1,5 +1,6 @@
 import express from 'express';
 const router = express.Router();
+import fs from 'fs';
 import data from '../../data/data.js';
 
 router.post('/', (req, res) => {
@@ -13,10 +14,13 @@ router.post('/', (req, res) => {
         address: req.body.address,
     };
     data.push(newCollege);
-    res.json({
-        message: 'New college added successfully',
-        newCollege
+    // write on file system
+    fs.writeFile('./data/data.js', `export default ${JSON.stringify(data)}`, (err) => {
+        if (err) {
+            console.log(err);
+        }
     });
+    res.json(newCollege);
 });
 
 router.get('/:id', (req, res) => {
@@ -32,6 +36,8 @@ router.patch('/:id', (req, res) => {
     if (!college) {
         return res.status(404).send('The college with the given ID was not found.');
     }
+    // write on file system
+
     data.map(college => {
         if (college.id === parseInt(req.params.id)) {
             college.name = req.body.name;
@@ -40,6 +46,11 @@ router.patch('/:id', (req, res) => {
             college.address = req.body.address;
         }
         return college;
+    });
+    fs.writeFile('./data/data.js', `export default ${JSON.stringify(data)}`, (err) => {
+        if (err) {
+            console.log(err);
+        }
     });
     res.json({
         message: 'College updated successfully',
@@ -54,6 +65,11 @@ router.delete('/:id', (req, res) => {
     }
     const index = data.indexOf(college);
     data.splice(index, 1);
+    fs.writeFile('./data/data.js', `export default ${JSON.stringify(data)}`, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
     return res.json({
         message: 'College deleted successfully',
         college
