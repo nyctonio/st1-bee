@@ -3,6 +3,7 @@ import router from './routes/index.js';
 const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
+import "./lib/mongoose.js";
 
 app.use(express.static('public'));
 app.use(express.json());

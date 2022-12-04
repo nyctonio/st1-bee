@@ -1,24 +1,18 @@
 import express from 'express';
 const router = express.Router();
-import data from '../data/data.js';
+import college from '../modals/college.js';
+import mongoose from 'mongoose';
 import collegeRouter from './college/index.js';
 
+router.use('/college', collegeRouter);
 
 router.get('/', (req, res) => {
-    res.send('welocme to the project of st1-bee');
+    res.send('welocme to the project of st2-bee');
 })
 
-router.get('/colleges', (req, res) => {
-    const colleges = data.map(college => {
-        return {
-            id: college.id,
-            name: college.name,
-            address: college.address,
-        }
-    });
+router.get('/colleges', async (req, res) => {
+    const colleges = await college.find();
     res.json(colleges);
 })
-
-router.use('/college', collegeRouter);
 
 export default router;
